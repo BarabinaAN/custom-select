@@ -2,23 +2,29 @@ export let select = function(){
     let selectWrap = document.querySelectorAll('.custom-select');
 
     function createFirstSelect() {
-        for (let i = 0; i < selectWrap.length; i++) {
-            let newList = createSelectList(selectWrap[i]),
+        for ( let i = 0; i < selectWrap.length; i++ ) {
+            let newList = createSelectList( selectWrap[i] ),
                 defaultSelect = selectWrap[i].querySelectorAll('select')[0];
+
                 let dsds = document.createElement('div');
                 dsds.classList.add('current-select');
                 selectWrap[i].insertBefore(dsds, newList).innerHTML = 'не написано';
                 
                 selectWrap[i].addEventListener('click', function(e) {
                     let selectItem = selectWrap[i].querySelectorAll('.select-item'),
-                        target = e.target;            
-                    newList.classList.add('active');
+                        addList = document.querySelectorAll('.select-list'),
+                        target = e.target;    
 
-                    if ( selectItem.length > 0 ) {
-                        removeSelectItem(selectItem);
-                        newList.classList.remove('active');
-                        dsds.innerHTML = target.innerHTML;
-                    } else {
+                    for (let i = 0; i < addList.length; i++) {
+                        if ( addList[i].classList.contains('active') ) {
+                            removeSelectItem( addList[i].querySelectorAll('.select-item') );
+                            addList[i].classList.remove('active');
+                            dsds.innerHTML = target.innerHTML;
+                        };
+                    }
+                    
+                    if ( selectItem.length == 0 ) {
+                        newList.classList.add('active');
                         for ( let i = 0; i < defaultSelect.length; i++ ) {
                             let optionText = defaultSelect[i].innerHTML;
                             createSelectItem(newList, optionText);
@@ -43,7 +49,7 @@ export let select = function(){
     }
 
     function removeSelectItem(par) {
-        for (let i = 0; i < par.length; i++) {
+        for ( let i = 0; i < par.length; i++ ) {
             par[i].parentNode.removeChild(par[i]); 
         }
     }

@@ -20,17 +20,19 @@ h1 {
     color: #fffdf0;
 }
 .center {
-    width: 200px;
-    margin: 0 auto;
-    font-family: Arial;
-}
-.select-inline {
     display: inline-block;
+    width: 100%;
+    text-align: center;
 }
-.wrapper-select {
+.wrapper {
+    display: inline-block;
     margin-bottom: 25px;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 .custom-select {
+    font-family: Arial;
+    text-align: left;
 }
 .custom-select select{
     display: none;
@@ -51,7 +53,7 @@ h1 {
 .select-item {
     box-sizing: border-box;
     width: 100%;
-    padding: 5px 10px;
+    padding: 5px 15px;
     font-size: 16px;
     line-height: 25px;
     border-top: 1px solid #fffdf0;
@@ -64,7 +66,7 @@ h1 {
     box-sizing: border-box;
     background-color: #fff5f5;
     width: 200px;
-    padding: 5px 10px;
+    padding: 5px 15px;
     font-size: 16px;
     line-height: 25px;
     border: 1px solid transparent;

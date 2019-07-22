@@ -1,57 +1,65 @@
 export let select = function(){
     let selectWrap = document.querySelectorAll('.custom-select');
 
-    function createFirstSelect() {
-        for ( let i = 0; i < selectWrap.length; i++ ) {
-            let newList = createSelectList( selectWrap[i] ),
-                defaultSelect = selectWrap[i].querySelectorAll('select')[0];
+    function createSelect() {
+        for ( let i = 0; i < selectWrap.length; i++ ) {          
+            let newList = createItem( selectWrap[i], null, 'select-list' ), // создаем обертку для списка
+                option = selectWrap[i].querySelectorAll('select')[0],
+                current = createItem( selectWrap[i], newList, 'current-select' ); // создаем элемент со стандартным значением
 
-                let dsds = document.createElement('div');
-                dsds.classList.add('current-select');
-                selectWrap[i].insertBefore(dsds, newList).innerHTML = 'не написано';
-                
-                selectWrap[i].addEventListener('click', function(e) {
-                    let selectItem = selectWrap[i].querySelectorAll('.select-item'),
-                        addList = document.querySelectorAll('.select-list'),
-                        target = e.target;    
+            current.innerHTML = 'не написано';
+            
+            // создаем элементы списка по клику на нужный select
+            selectWrap[i].addEventListener('click', function(e) {
+                let selectItem = selectWrap[i].querySelectorAll('.select-item'),
+                    selectList = document.querySelectorAll('.select-list'),
+                    target = e.target;    
 
-                    for (let i = 0; i < addList.length; i++) {
-                        if ( addList[i].classList.contains('active') ) {
-                            removeSelectItem( addList[i].querySelectorAll('.select-item') );
-                            addList[i].classList.remove('active');
-                            dsds.innerHTML = target.innerHTML;
-                        };
+                // удаляем элементы списка при клике на один из элементов
+                for (let i = 0; i < selectList.length; i++) {
+                    if ( target.classList.contains('current-select') || target.classList.contains('select-item') && selectList[i].classList.contains('active') ) {
+                        removeItem( selectList[i].querySelectorAll('.select-item') );
+                        selectList[i].classList.remove('active');
+                        current.innerHTML = target.innerHTML;
+                    };
+                }
+
+                // создаем элементы списка при клике на select
+                if ( selectItem.length == 0 ) {
+                    newList.classList.add('active');
+                    for ( let i = 0; i < option.length; i++ ) {
+                        let item = createItem(newList, null, 'select-item');
+                        item.textContent = option[i].innerHTML;
                     }
-                    
-                    if ( selectItem.length == 0 ) {
-                        newList.classList.add('active');
-                        for ( let i = 0; i < defaultSelect.length; i++ ) {
-                            let optionText = defaultSelect[i].innerHTML;
-                            createSelectItem(newList, optionText);
-                        }
-                    }
-                });
+                }
+            });
         }
     }
-    createFirstSelect();
-    
-    function createSelectList(par) {
-        let list = document.createElement('div');
-        list.classList.add('select-list');
-        return par.appendChild(list);
-    }
 
-    function createSelectItem(par_1, par_2) {
+    // удаляем элементы списка при клике вне списка
+    document.addEventListener('click', function(e){
+        let selectList = document.querySelectorAll('.select-list'),
+            target = e.target;    
+
+        for (let i = 0; i < selectList.length; i++) {
+            if ( !target.classList.contains('current-select') && selectList[i].classList.contains('active') ) {
+                removeItem( selectList[i].querySelectorAll('.select-item') );
+                selectList[i].classList.remove('active');
+            };
+        }
+    });
+
+    createSelect();
+
+    function createItem(wrap, list, cl) {
         let item = document.createElement('div');
-        item.classList.add('select-item');
-        item.textContent = par_2;
-        par_1.appendChild(item);
+        item.classList.add(cl);
+        return wrap.insertBefore(item, list);
     }
 
-    function removeSelectItem(par) {
+    function removeItem(par) {
         for ( let i = 0; i < par.length; i++ ) {
             par[i].parentNode.removeChild(par[i]); 
         }
     }
-
 }
